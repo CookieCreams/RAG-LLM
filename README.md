@@ -26,14 +26,19 @@ Le projet repose sur la stack "LangChain" pour orchestrer les données :
 ## Installation
 
 1. Prérequis
+
 Python 3.10+
+
 Ollama installé et lancé.
 
 2. Modèles nécessaires
 Ouvrez un terminal et récupérez les modèles utilisés :
 
+```bash
 ollama pull llama3:8b-instruct-q4_0
+
 ollama pull mxbai-embed-large
+```
 
 3. Installation des dépendances
 
@@ -42,7 +47,9 @@ pip install -r requirements.txt
 ## Utilisation
 Lancer l'application :
 
+```bash
 streamlit run 5_app_visuelle.py
+```
 
 Ajouter des documents : Utilisez la barre latérale pour uploader vos PDF.
 
