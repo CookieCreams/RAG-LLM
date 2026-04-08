@@ -1,0 +1,39 @@
+services:
+ 
+  # --- Service Ollama (moteur LLM local) ---
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama   # Modèles persistants entre redémarrages
+    restart: unless-stopped
+    # Décommente la section suivante si tu as un GPU Nvidia :
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+ 
+  # --- Service Streamlit (notre app RAG) ---
+  app:
+    build: .
+    container_name: rag_app
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data           # PDFs uploadés
+      - ./ma_base:/app/ma_base     # Base vectorielle ChromaDB
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - LLM_MODEL=mistral              # Change ici pour switcher de modèle llama3, mistral, gemma3, phi3...
+      - EMBED_MODEL=mxbai-embed-large  # Change ici pour switcher d embeddings
+    depends_on:
+      - ollama
+    restart: unless-stopped
+ 
+volumes:
+  ollama_data:
